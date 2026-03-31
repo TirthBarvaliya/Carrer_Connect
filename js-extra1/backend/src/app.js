@@ -33,6 +33,7 @@ app.use(
 // --- CORS: allow Vercel frontend + localhost dev origins ---
 const allowedOrigins = [
   ...(config.clientUrl ? config.clientUrl.split(",").map((u) => u.trim()) : []),
+  "https://carrer-connect-nine.vercel.app",
   "http://localhost:5173",
   "http://localhost:5174",
   "http://127.0.0.1:5173",
@@ -57,10 +58,10 @@ app.use(
           return callback(null, true);
         }
 
-        // Allow any *.vercel.app subdomain for this user's project
+        // Allow any *.vercel.app subdomain for this project
         if (
           parsed.hostname.endsWith(".vercel.app") &&
-          parsed.hostname.includes("tirth-barvaliya")
+          (parsed.hostname.includes("carrer-connect") || parsed.hostname.includes("tirth-barvaliya"))
         ) {
           return callback(null, true);
         }
