@@ -48,10 +48,20 @@ app.use(
         return callback(null, true);
       }
 
-      // Allow any localhost origin for development
+      // Allow any Vercel deployment URL for this project
       try {
         const parsed = new URL(origin);
+
+        // Allow localhost for development
         if (parsed.hostname === "localhost" || parsed.hostname === "127.0.0.1") {
+          return callback(null, true);
+        }
+
+        // Allow any *.vercel.app subdomain for this user's project
+        if (
+          parsed.hostname.endsWith(".vercel.app") &&
+          parsed.hostname.includes("tirth-barvaliya")
+        ) {
           return callback(null, true);
         }
       } catch {
