@@ -1,7 +1,5 @@
 # Career Connect
 
-![Career Connect Banner](https://via.placeholder.com/1200x400?text=Career+Connect+-+Guidance+%26+Job+Portal)
-
 **Career Connect** is a cutting-edge MERN stack platform designed to seamlessly bridge the gap between job seekers and recruiters. With an elegant UI powered by TailwindCSS and fluid Framer Motion animations, it provides a feature-rich portal including applicant tracking, intelligent career AI guidance, and comprehensive interactive roadmaps.
 
 ---
@@ -97,16 +95,11 @@ npm run dev
 
 ---
 
-## 📸 Screenshots
+⚠️ License Notice
 
-| Landing Page | Hiring Pipeline |
-|--------------|-----------------|
-| <img src="https://via.placeholder.com/600x400?text=Landing+Page+Preview" alt="Landing Page"> | <img src="https://via.placeholder.com/600x400?text=Pipeline+Preview" alt="Hiring Pipeline"> |
+This project is protected under a custom "All Rights Reserved" license.
 
-| Interactive AI | Payment Simulation |
-|-----------------|--------------------|
-| <img src="https://via.placeholder.com/600x400?text=AI+Chatbot+Preview" alt="Career AI Chatbot"> | <img src="https://via.placeholder.com/600x400?text=Mock+Payment+Preview" alt="Mock Payments"> |
-
+You are allowed to view the code, but copying, modifying, or using this project is strictly prohibited without permission.
 ---
 
 ## 📝 License
