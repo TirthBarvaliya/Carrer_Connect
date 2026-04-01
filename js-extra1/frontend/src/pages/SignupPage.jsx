@@ -176,7 +176,7 @@ const SignupPage = () => {
           type: "standard",
           theme: "outline",
           size: "large",
-          width: Math.min(400, Math.max(200, window.innerWidth - 64)),
+          width: Math.min(400, Math.max(200, window.innerWidth - 140)),
           text: "signup_with"
         });
         return true;
@@ -697,10 +697,10 @@ const SignupPage = () => {
                   </div>
                   {/* Google Sign-Up — real button with animation wrapper */}
                   <RevolvingBorderButton className="w-full">
-                    <div className="flex w-full items-center justify-center rounded-xl border border-slate-300/70 bg-white/80 px-4 py-1 transition hover:-translate-y-0.5 hover:shadow-soft dark:border-slate-700 dark:bg-slate-900/80">
+                    <div className="flex w-full overflow-hidden items-center justify-center rounded-xl border border-slate-300/70 bg-white/80 px-1 py-1 transition hover:-translate-y-0.5 hover:shadow-soft dark:border-slate-700 dark:bg-slate-900/80">
                       <div
                         ref={googleBtnContainerRef}
-                        className="flex w-full items-center justify-center"
+                        className="flex w-full overflow-hidden items-center justify-center"
                         style={{ minHeight: 44 }}
                       />
                     </div>
