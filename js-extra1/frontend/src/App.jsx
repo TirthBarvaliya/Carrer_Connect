@@ -45,7 +45,7 @@ const PageShell = ({ children }) => (
 const App = () => {
   const location = useLocation();
   const dispatch = useDispatch();
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
   const theme = useSelector((state) => state.ui.theme);
 
   useEffect(() => {
