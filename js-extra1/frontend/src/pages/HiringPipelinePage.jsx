@@ -11,6 +11,7 @@ import usePageTitle from "../hooks/usePageTitle";
 import { ROUTES } from "../utils/constants";
 import ResumeViewerModal from "../components/common/ResumeViewerModal";
 import Modal from "../components/common/Modal";
+import InterviewScheduleModal from "../components/common/InterviewScheduleModal";
 
 const PIPELINE_COLUMNS = [
   { id: "Applied", label: "Applied", color: "text-slate-500", dot: "bg-slate-400", border: "border-slate-200", bg: "bg-white" },
@@ -46,6 +47,7 @@ export default function HiringPipelinePage() {
   const [resumeModalData, setResumeModalData] = useState(null);
   const [statusUpdatingId, setStatusUpdatingId] = useState("");
   const [emailSendingId, setEmailSendingId] = useState("");
+  const [schedulingCandidate, setSchedulingCandidate] = useState(null);
 
   const loadData = async () => {
     try {
@@ -86,6 +88,16 @@ export default function HiringPipelinePage() {
       dispatch(addToast({ type: "error", message: getErrorMessage(error, "Failed to update status.") }));
     } finally {
       setStatusUpdatingId("");
+    }
+  };
+
+  const handleScheduleSuccess = (status, interview) => {
+    if (!schedulingCandidate) return;
+    setApplicantsRaw(prev => prev.map(app => 
+      app.id === schedulingCandidate.id ? { ...app, status, interview } : app
+    ));
+    if (selectedApplication?.id === schedulingCandidate.id) {
+      setSelectedApplication(prev => ({ ...prev, status, interview }));
     }
   };
 
@@ -289,7 +301,7 @@ export default function HiringPipelinePage() {
                             </button>
                           ) : applicant.status === "Shortlisted" ? (
                             <button 
-                              onClick={() => navigate(ROUTES.RECRUITER_INTERVIEWS)}
+                              onClick={() => setSchedulingCandidate(applicant)}
                               className="px-3 py-1.5 rounded-lg text-xs font-bold text-purple-600 bg-purple-50 transition hover:bg-purple-100 dark:bg-purple-900/30 dark:text-purple-300"
                             >
                               Schedule
@@ -416,6 +428,13 @@ export default function HiringPipelinePage() {
         onClose={() => setResumeModalData(null)}
         resumeUrl={resumeModalData?.url || ""}
         candidateName={resumeModalData?.name || "Candidate"}
+      />
+
+      <InterviewScheduleModal
+        isOpen={!!schedulingCandidate}
+        onClose={() => setSchedulingCandidate(null)}
+        candidate={schedulingCandidate}
+        onSuccess={handleScheduleSuccess}
       />
     </div>
   );
