@@ -9,7 +9,8 @@
     "start": "node src/server.js",
     "seed": "node src/utils/seed.js",
     "seed:demo": "node src/utils/seedDemo.js",
-    "puter:token": "node src/utils/getPuterAuthToken.js"
+    "puter:token": "node src/utils/getPuterAuthToken.js",
+    "postinstall": "npx puppeteer browsers install chrome"
   },
   "keywords": [
     "mern",
