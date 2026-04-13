@@ -116,15 +116,29 @@ const PostJobPage = () => {
                 <Coins size={22} className="text-amber-600 dark:text-amber-400" />
               </div>
               <div>
-                <div className="flex items-center gap-2">
-                  <span className="text-2xl font-bold text-slate-900 dark:text-white">{creditBalance.credits}</span>
-                  <span className="text-sm font-medium text-slate-500 dark:text-slate-400">credits remaining</span>
+                <div className="flex flex-col justify-center">
+                  {creditBalance.canPostFree ? (
+                    <>
+                      <div className="flex items-center text-slate-900 dark:text-white">
+                        <span className="text-2xl font-bold">{creditBalance.freePostsRemaining}</span>
+                        <span className="ml-1.5 text-sm font-semibold">free posts</span>
+                      </div>
+                      <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+                        (You also have {creditBalance.credits} paid credits)
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <div className="flex items-center text-slate-900 dark:text-white">
+                        <span className="text-2xl font-bold">{creditBalance.credits}</span>
+                        <span className="ml-1.5 text-sm font-semibold">credits</span>
+                      </div>
+                      <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+                        Free quota exhausted
+                      </p>
+                    </>
+                  )}
                 </div>
-                <p className="text-xs text-slate-500 dark:text-slate-400">
-                  {creditBalance.canPostFree
-                    ? `${creditBalance.freePostsRemaining} of ${creditBalance.freePostLimit} free posts remaining`
-                    : "Free posts exhausted — using credits"}
-                </p>
               </div>
             </div>
             <button
