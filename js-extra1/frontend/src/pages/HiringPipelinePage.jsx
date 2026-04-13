@@ -190,47 +190,47 @@ export default function HiringPipelinePage() {
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-[#0B1120] pb-10">
-      <div className="px-6 py-6 border-b border-slate-200/80 bg-white/50 dark:border-slate-800 dark:bg-slate-900/50">
-        <div className="flex items-center gap-4">
+      <div className="px-3 py-4 sm:px-6 sm:py-6 border-b border-slate-200/80 bg-white/50 dark:border-slate-800 dark:bg-slate-900/50">
+        <div className="flex items-start gap-3 sm:items-center sm:gap-4">
           <button 
             onClick={goBack}
-            className="p-2 -ml-2 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition dark:hover:bg-slate-800 dark:hover:text-slate-200"
+            className="p-2 -ml-1 sm:-ml-2 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition shrink-0 dark:hover:bg-slate-800 dark:hover:text-slate-200"
           >
             <ArrowLeft size={20} />
           </button>
-          <div>
-            <h1 className="text-3xl font-bold font-poppins text-slate-900 dark:text-white tracking-tight">
-              Hiring Pipeline — <span className="text-brand-indigo">{job.title}</span>
+          <div className="min-w-0">
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold font-poppins text-slate-900 dark:text-white tracking-tight">
+              Hiring Pipeline — <span className="text-brand-indigo truncate">{job.title}</span>
             </h1>
-            <p className="text-sm font-medium text-slate-500 mt-1">
-              Drag-free Kanban board • {applicantsRaw.length} applicant{applicantsRaw.length !== 1 ? 's' : ''} across {activeStagesCount} stage{activeStagesCount !== 1 ? 's' : ''}
+            <p className="text-xs sm:text-sm font-medium text-slate-500 mt-1">
+              Kanban board • {applicantsRaw.length} applicant{applicantsRaw.length !== 1 ? 's' : ''} across {activeStagesCount} stage{activeStagesCount !== 1 ? 's' : ''}
             </p>
           </div>
         </div>
       </div>
 
-      <div className="px-6 mt-8">
+      <div className="px-3 sm:px-6 mt-4 sm:mt-8">
         {/* Stat Cards Row */}
-        <div className="flex gap-4 overflow-x-auto pb-4 custom-scrollbar mb-4">
+        <div className="flex gap-2 sm:gap-4 overflow-x-auto pb-4 custom-scrollbar mb-4">
           {stats.map((stat, idx) => (
             <div 
               key={idx} 
-              className="px-6 py-5 min-w-[140px] flex-1 flex flex-col items-center justify-center bg-white rounded-2xl border border-slate-200/80 shadow-sm dark:bg-slate-800/80 dark:border-slate-700"
+              className="px-3 py-3 sm:px-6 sm:py-5 min-w-[100px] sm:min-w-[140px] flex-1 flex flex-col items-center justify-center bg-white rounded-xl sm:rounded-2xl border border-slate-200/80 shadow-sm dark:bg-slate-800/80 dark:border-slate-700"
             >
-              <span className={`text-3xl font-bold mb-1 ${stat.color}`}>{stat.value}</span>
-              <span className="text-[10px] font-bold tracking-widest text-slate-400 uppercase">{stat.label}</span>
+              <span className={`text-xl sm:text-3xl font-bold mb-0.5 sm:mb-1 ${stat.color}`}>{stat.value}</span>
+              <span className="text-[8px] sm:text-[10px] font-bold tracking-widest text-slate-400 uppercase">{stat.label}</span>
             </div>
           ))}
         </div>
 
         {/* Kanban Board */}
-        <div className="flex gap-5 overflow-x-auto pb-6 tracking-wide snap-x custom-scrollbar min-h-[650px]">
+        <div className="flex gap-3 sm:gap-5 overflow-x-auto pb-6 tracking-wide snap-x custom-scrollbar min-h-[400px] sm:min-h-[650px]">
           {PIPELINE_COLUMNS.map((col) => {
             const columnApplicants = grouped[col.id] || [];
             return (
               <div 
                 key={col.id} 
-                className={`flex flex-col w-[320px] shrink-0 snap-start rounded-3xl border-2 ${col.border} ${col.bg} p-2.5 transition-colors`}
+                className={`flex flex-col w-[260px] sm:w-[320px] shrink-0 snap-start rounded-2xl sm:rounded-3xl border-2 ${col.border} ${col.bg} p-2 sm:p-2.5 transition-colors`}
               >
                 {/* Column Header */}
                 <div className="flex items-center justify-between px-3 py-2 mb-2">
@@ -282,7 +282,7 @@ export default function HiringPipelinePage() {
                         </div>
 
                         {/* Action Buttons */}
-                        <div className="flex items-center gap-2 mt-auto">
+                        <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mt-auto">
                           {applicant.status === "Applied" ? (
                             <button 
                               onClick={() => handleStatusChange(applicant.id, "Review")}
@@ -378,26 +378,26 @@ export default function HiringPipelinePage() {
       <Modal isOpen={profileModalOpen} onClose={() => setProfileModalOpen(false)} title="Applicant Profile" maxWidthClass="max-w-2xl">
         {selectedApplication ? (
            <div className="space-y-4 pb-2">
-            <div className="flex items-start gap-4">
-              <div className="w-16 h-16 rounded-xl bg-slate-100 flex items-center justify-center text-xl font-bold text-brand-indigo shrink-0">
+            <div className="flex items-start gap-3 sm:gap-4">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl bg-slate-100 flex items-center justify-center text-lg sm:text-xl font-bold text-brand-indigo shrink-0">
                 {selectedApplication.candidate?.name?.charAt(0) || "U"}
               </div>
-              <div>
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white">{selectedApplication.candidate?.name || "Unknown Candidate"}</h3>
-                <p className="text-sm text-slate-600 dark:text-slate-300">{selectedApplication.candidate?.headline || "No headline provided"}</p>
-                <div className="flex gap-2 mt-2">
-                   <span className="px-2 py-1 text-xs font-bold rounded bg-emerald-100 text-emerald-700">Match score: {selectedApplication.matchScore}%</span>
-                   <span className="px-2 py-1 text-xs font-bold rounded bg-brand-indigo/10 text-brand-indigo">Status: {selectedApplication.status}</span>
+              <div className="min-w-0">
+                <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white truncate">{selectedApplication.candidate?.name || "Unknown Candidate"}</h3>
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 truncate">{selectedApplication.candidate?.headline || "No headline provided"}</p>
+                <div className="flex flex-wrap gap-1.5 sm:gap-2 mt-2">
+                   <span className="px-2 py-1 text-[10px] sm:text-xs font-bold rounded bg-emerald-100 text-emerald-700">Match: {selectedApplication.matchScore}%</span>
+                   <span className="px-2 py-1 text-[10px] sm:text-xs font-bold rounded bg-brand-indigo/10 text-brand-indigo">{selectedApplication.status}</span>
                 </div>
               </div>
             </div>
             
-            <div className="p-4 bg-slate-50 rounded-xl border border-slate-100 dark:bg-slate-800/50 dark:border-slate-700 mt-4">
+            <div className="p-3 sm:p-4 bg-slate-50 rounded-xl border border-slate-100 dark:bg-slate-800/50 dark:border-slate-700 mt-4">
               <h4 className="font-bold text-sm mb-2 text-slate-800 dark:text-slate-200">Contact Details</h4>
               <p className="text-sm text-slate-600 dark:text-slate-400">Email: {selectedApplication.candidate?.email || "N/A"}</p>
             </div>
 
-            <div className="p-4 bg-slate-50 rounded-xl border border-slate-100 dark:bg-slate-800/50 dark:border-slate-700">
+            <div className="p-3 sm:p-4 bg-slate-50 rounded-xl border border-slate-100 dark:bg-slate-800/50 dark:border-slate-700">
               <h4 className="font-bold text-sm mb-2 text-slate-800 dark:text-slate-200">Skills</h4>
               <div className="flex flex-wrap gap-1.5">
                 {(selectedApplication.candidate?.skills || []).map((s, i) => (

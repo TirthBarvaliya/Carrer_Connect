@@ -41,11 +41,11 @@ const featureIcons = {
 };
 
 const PREP_DOMAINS = [
-  { id: "frontend-developer", title: "Frontend Developer", icon: Code2, color: "from-blue-500/20 to-cyan-500/5", border: "border-blue-500/30", video: "/videos/frontend.mp4" },
-  { id: "ai-ml-engineer", title: "AI / ML Engineer", icon: Brain, color: "from-purple-500/20 to-pink-500/5", border: "border-purple-500/30", video: "/videos/aiml.mp4" },
-  { id: "ui-ux-designer", title: "UI / UX Designer", icon: Palette, color: "from-emerald-500/20 to-teal-500/5", border: "border-emerald-500/30", video: "/videos/uiux.mp4" },
-  { id: "backend-developer", title: "Backend Developer", icon: CloudCog, color: "from-indigo-500/20 to-violet-500/5", border: "border-indigo-500/30", video: "/videos/backend.mp4" },
-  { id: "data-analyst", title: "Data Analyst", icon: Route, color: "from-orange-500/20 to-red-500/5", border: "border-orange-500/30", video: "/videos/data.mp4" }
+  { id: "frontend-developer", title: "Frontend Developer", icon: Code2, color: "from-blue-500/20 to-cyan-500/5", border: "border-blue-500/30", video: "https://res.cloudinary.com/dj7wzw0o1/video/upload/v1775821746/frontend_oojzdx.mp4" },
+  { id: "ai-ml-engineer", title: "AI / ML Engineer", icon: Brain, color: "from-purple-500/20 to-pink-500/5", border: "border-purple-500/30", video: "https://res.cloudinary.com/dj7wzw0o1/video/upload/v1775821228/aiml_tewlk0.mp4" },
+  { id: "ui-ux-designer", title: "UI / UX Designer", icon: Palette, color: "from-emerald-500/20 to-teal-500/5", border: "border-emerald-500/30", video: "https://res.cloudinary.com/dj7wzw0o1/video/upload/v1775821756/uiux_qbjjwj.mp4" },
+  { id: "backend-developer", title: "Backend Developer", icon: CloudCog, color: "from-indigo-500/20 to-violet-500/5", border: "border-indigo-500/30", video: "https://res.cloudinary.com/dj7wzw0o1/video/upload/v1775821569/backend_g7psmr.mp4" },
+  { id: "data-analyst", title: "Data Analyst", icon: Route, color: "from-orange-500/20 to-red-500/5", border: "border-orange-500/30", video: "https://res.cloudinary.com/dj7wzw0o1/video/upload/v1775821728/data_x85gxb.mp4" }
 ];
 
 const buildFallbackSnapshot = () => {

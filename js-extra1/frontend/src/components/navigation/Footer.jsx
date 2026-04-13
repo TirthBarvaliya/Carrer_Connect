@@ -48,7 +48,7 @@ const Footer = () => {
           </div>
           <div>
             <h4 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-300">Contact</h4>
-            <p className="text-sm text-slate-600 dark:text-slate-300">careerconnect.noreply@gmail.com</p>
+            <p className="text-sm text-slate-600 dark:text-slate-300">carrerconnec.tnoreply@gmail.com</p>
           </div>
         </div>
         <p className="mt-8 text-xs text-slate-500 dark:text-slate-400">© {new Date().getFullYear()} Career connect. All rights reserved.</p>

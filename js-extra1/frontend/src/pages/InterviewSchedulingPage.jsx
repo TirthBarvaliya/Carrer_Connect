@@ -226,21 +226,21 @@ const InterviewSchedulingPage = () => {
                                         >
                                             <form
                                                 onSubmit={(e) => handleScheduleSubmit(e, candidate.id)}
-                                                className="mt-4 rounded-xl border border-slate-200/70 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900/50"
+                                                className="mt-4 rounded-xl border border-slate-200/70 bg-slate-50 p-3 sm:p-4 dark:border-slate-700 dark:bg-slate-900/50"
                                             >
                                                 <div className="grid gap-4 sm:grid-cols-2">
                                                     <div className="space-y-1.5 sm:col-span-2">
                                                         <label className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
                                                             Date & Time (12-hour format)
                                                         </label>
-                                                        <div className="flex gap-2">
+                                                        <div className="flex flex-wrap gap-2">
                                                             <input
                                                                 type="date"
                                                                 required
                                                                 min={new Date().toISOString().split('T')[0]}
                                                                 value={formData.date}
                                                                 onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                                                                className="field-input text-sm flex-1"
+                                                                className="field-input text-sm flex-1 min-w-[140px]"
                                                             />
                                                             <input
                                                                 type="text"

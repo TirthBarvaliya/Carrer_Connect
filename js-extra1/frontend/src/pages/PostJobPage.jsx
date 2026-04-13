@@ -109,8 +109,8 @@ const PostJobPage = () => {
 
       {/* Credit Balance Card */}
       {creditBalance && (
-        <GlassCard className="p-4" hoverable={false}>
-          <div className="flex flex-wrap items-center justify-between gap-4">
+        <GlassCard className="p-3 sm:p-4" hoverable={false}>
+          <div className="flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center justify-between gap-3 sm:gap-4">
             <div className="flex items-center gap-4">
               <div className="rounded-xl bg-gradient-to-br from-amber-100 to-amber-200 p-3 dark:from-amber-900/50 dark:to-amber-800/40">
                 <Coins size={22} className="text-amber-600 dark:text-amber-400" />
@@ -154,7 +154,7 @@ const PostJobPage = () => {
       )}
 
       {/* Post Job Form */}
-      <GlassCard className="p-6 sm:p-8" hoverable={false}>
+      <GlassCard className="p-4 sm:p-6 md:p-8" hoverable={false}>
         <h2 className="mb-6 text-2xl font-bold text-slate-900 dark:text-white">Post a New Job</h2>
         <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
           <div className="grid gap-4 sm:grid-cols-2">

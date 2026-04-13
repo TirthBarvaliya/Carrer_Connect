@@ -218,7 +218,7 @@ const demoJobs = [
   }
 ];
 
-// ─── Roadmap progress for demo job seeker ────────────────────────────────────
+
 
 const createDemoRoadmapDocs = (userId) => {
   const progressValues = { frontend: 72, backend: 55, mern: 65, "ai-ml": 30, devops: 18, "product-design": 10 };

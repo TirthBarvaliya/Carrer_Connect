@@ -379,7 +379,7 @@ const RecruiterDashboardPage = () => {
           <div className="mb-3 h-px bg-slate-200/80 dark:bg-slate-700/60" />
 
           {/* Job Listings — constrained height with inner scroll */}
-          <div className="space-y-2.5 overflow-y-auto pr-1" style={{ maxHeight: "calc(100vh - 340px)" }}>
+          <div className="space-y-2.5 overflow-y-auto pr-1" style={{ maxHeight: "min(calc(100vh - 340px), 600px)" }}>
             {filteredListings.length > 0 ? (
               filteredListings.slice(0, 8).map((job) => (
                 <motion.div
@@ -387,10 +387,10 @@ const RecruiterDashboardPage = () => {
                   whileHover={{ y: -2 }}
                   className="rounded-xl border border-slate-200/80 bg-white/75 p-3.5 dark:border-slate-700 dark:bg-slate-900/75"
                 >
-                  <div className="flex items-center justify-between gap-3">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-3">
                     <div className="min-w-0">
                       <p className="font-semibold text-slate-800 dark:text-slate-100 truncate">{job.title}</p>
-                      <p className="text-sm text-slate-500 dark:text-slate-300">
+                      <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-300 truncate">
                         {job.location} • ₹{job.salary.toLocaleString("en-IN")}{job.salaryMax ? ` - ₹${job.salaryMax.toLocaleString("en-IN")}` : ""}
                       </p>
                     </div>
@@ -478,8 +478,8 @@ const RecruiterDashboardPage = () => {
 
           {/* Credit Balance — compact */}
           {creditBalance && (
-            <GlassCard className="p-3.5" hoverable={false}>
-              <div className="flex flex-wrap items-center justify-between gap-3">
+            <GlassCard className="p-3 sm:p-3.5" hoverable={false}>
+              <div className="flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center justify-between gap-3">
                 <div className="flex items-center gap-3">
                   <div className="rounded-xl bg-gradient-to-br from-amber-100 to-amber-200 p-2.5 dark:from-amber-900/50 dark:to-amber-800/40">
                     <Coins size={20} className="text-amber-600 dark:text-amber-400" />
