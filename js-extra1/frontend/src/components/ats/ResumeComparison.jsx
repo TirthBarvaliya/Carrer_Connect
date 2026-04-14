@@ -7,7 +7,6 @@ import GradientButton from "../common/GradientButton";
 import { addToast } from "../../redux/slices/uiSlice";
 import apiClient from "../../utils/api";
 import { ROUTES } from "../../utils/constants";
-import { buildResumePdf } from "../../utils/resumePdf";
 
 const ResumeComparison = ({ enhancedResume, originalPdfUrl, downloadActionRef }) => {
   const dispatch = useDispatch();
@@ -18,23 +17,10 @@ const ResumeComparison = ({ enhancedResume, originalPdfUrl, downloadActionRef })
   const [htmlContent, setHtmlContent] = useState("");
   const [isRendering, setIsRendering] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
-  const [userAvatarUrl, setUserAvatarUrl] = useState("");
-
-  // Fetch user avatar on mount so photo-enabled templates can display it
-  useEffect(() => {
-    const fetchAvatar = async () => {
-      try {
-        const resp = await apiClient.get("/users/profile");
-        const avatarData = resp.data?.profile?.avatar?.dataUrl || "";
-        setUserAvatarUrl(avatarData);
-      } catch {
-        // Silently fail — photo just won't appear
-      }
-    };
-    fetchAvatar();
-  }, []);
 
   // Fetch rendered HTML when theme changes
+  // NOTE: No user avatar is fetched — ATS checker analyzes external resumes,
+  //       so the logged-in user's profile photo should NOT appear.
   useEffect(() => {
     let active = true;
     const fetchRender = async () => {
@@ -42,7 +28,7 @@ const ResumeComparison = ({ enhancedResume, originalPdfUrl, downloadActionRef })
       setIsRendering(true);
       try {
         const response = await apiClient.post("/resume/render", {
-          resumeData: { ...enhancedResume, avatarUrl: userAvatarUrl, includePhoto: true },
+          resumeData: { ...enhancedResume, includePhoto: false },
           themeId: themeId,
           formatting: { spacing: "medium", fontSize: "14px" }
         });
@@ -58,44 +44,70 @@ const ResumeComparison = ({ enhancedResume, originalPdfUrl, downloadActionRef })
 
     fetchRender();
     return () => { active = false; };
-  }, [themeId, enhancedResume, dispatch, userAvatarUrl]);
+  }, [themeId, enhancedResume, dispatch]);
 
-  // Handle PDF Export with jsPDF fallback
+  /**
+   * Export the Enhanced Resume as PDF.
+   * Uses the server-rendered HTML (which matches the live preview exactly)
+   * and triggers the browser's print-to-PDF to generate a real PDF file.
+   * This ensures the downloaded PDF always matches the selected template.
+   */
   const handleExportPdf = async () => {
     setIsExporting(true);
     try {
-      try {
-        const response = await apiClient.post(
-          "/resume/export-pdf",
-          {
-            resumeData: { ...enhancedResume, avatarUrl: userAvatarUrl, includePhoto: true },
-            themeId: themeId,
-            formatting: { spacing: "medium", fontSize: "14px" }
-          },
-          { responseType: "blob" }
-        );
-        
-        const blob = new Blob([response.data], { type: "application/pdf" });
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute("download", `${enhancedResume.fullName || "Enhanced"}_Resume.pdf`);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        window.URL.revokeObjectURL(url);
-      } catch {
-        // Fallback: generate PDF client-side using jsPDF
-        const resumeDataForPdf = {
-          ...enhancedResume,
-          template: "modern"
-        };
-        const doc = buildResumePdf({ resumeData: resumeDataForPdf, avatar: {} });
-        const safeName = (enhancedResume.fullName || "Enhanced").toLowerCase().replace(/[^a-z0-9]+/g, "-");
-        doc.save(`${safeName || "enhanced"}-resume.pdf`);
+      if (!htmlContent) {
+        dispatch(addToast({ type: "error", message: "Please wait for the template to finish rendering." }));
+        return;
       }
-      
-      dispatch(addToast({ type: "success", message: "PDF downloaded successfully!" }));
+
+      // Build a complete print-ready HTML document from the rendered content
+      const safeName = (enhancedResume?.fullName || "Enhanced").replace(/[^a-zA-Z0-9\s]/g, "").trim();
+      const printHtml = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <title>${safeName} - Resume</title>
+          <style>
+            @media print {
+              body { margin: 0; padding: 0; }
+              @page { size: A4; margin: 10mm; }
+            }
+          </style>
+        </head>
+        <body>${htmlContent}</body>
+        </html>
+      `;
+
+      // Open a print window with the rendered resume
+      const printWindow = window.open("", "_blank", "width=900,height=1100");
+      if (!printWindow) {
+        dispatch(addToast({ type: "error", message: "Please allow pop-ups to download the PDF." }));
+        return;
+      }
+
+      printWindow.document.open();
+      printWindow.document.write(printHtml);
+      printWindow.document.close();
+
+      // Wait for content to load, then trigger print
+      const triggerPrint = () => {
+        try {
+          printWindow.focus();
+          printWindow.print();
+        } catch {
+          // Fallback: just let the user manually Ctrl+P
+        }
+      };
+
+      // Use onload for reliable timing
+      if (printWindow.document.readyState === "complete") {
+        setTimeout(triggerPrint, 300);
+      } else {
+        printWindow.onload = () => setTimeout(triggerPrint, 300);
+      }
+
+      dispatch(addToast({ type: "success", message: "Print dialog opened — select \"Save as PDF\" to download your resume." }));
     } catch (error) {
       dispatch(addToast({ type: "error", message: "Failed to generate PDF." }));
     } finally {
@@ -199,3 +211,4 @@ const ResumeComparison = ({ enhancedResume, originalPdfUrl, downloadActionRef })
 };
 
 export default ResumeComparison;
+
