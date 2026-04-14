@@ -48,9 +48,9 @@ const ResumeComparison = ({ enhancedResume, originalPdfUrl, downloadActionRef })
 
   /**
    * Export the Enhanced Resume as PDF.
-   * Uses the server-rendered HTML (which matches the live preview exactly)
-   * and triggers the browser's print-to-PDF to generate a real PDF file.
-   * This ensures the downloaded PDF always matches the selected template.
+   * Uses html2pdf.js to convert the server-rendered HTML (which matches the
+   * live preview exactly) into a real PDF and auto-downloads it.
+   * No print dialogs, no pop-ups — professional direct download.
    */
   const handleExportPdf = async () => {
     setIsExporting(true);
@@ -60,60 +60,47 @@ const ResumeComparison = ({ enhancedResume, originalPdfUrl, downloadActionRef })
         return;
       }
 
-      // Build a complete print-ready HTML document from the rendered content
-      const safeName = (enhancedResume?.fullName || "Enhanced").replace(/[^a-zA-Z0-9\s]/g, "").trim();
-      const printHtml = `
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <meta charset="utf-8">
-          <title>${safeName} - Resume</title>
-          <style>
-            @media print {
-              body { margin: 0; padding: 0; }
-              @page { size: A4; margin: 10mm; }
-            }
-          </style>
-        </head>
-        <body>${htmlContent}</body>
-        </html>
-      `;
+      const html2pdf = (await import("html2pdf.js")).default;
 
-      // Open a print window with the rendered resume
-      const printWindow = window.open("", "_blank", "width=900,height=1100");
-      if (!printWindow) {
-        dispatch(addToast({ type: "error", message: "Please allow pop-ups to download the PDF." }));
-        return;
-      }
+      // Create an off-screen container with the rendered HTML
+      const container = document.createElement("div");
+      container.innerHTML = htmlContent;
+      container.style.position = "fixed";
+      container.style.left = "-9999px";
+      container.style.top = "0";
+      container.style.width = "794px"; // A4 width in pixels at 96 DPI
+      container.style.background = "#fff";
+      document.body.appendChild(container);
 
-      printWindow.document.open();
-      printWindow.document.write(printHtml);
-      printWindow.document.close();
+      const safeName = (enhancedResume?.fullName || "Enhanced")
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-|-$/g, "");
 
-      // Wait for content to load, then trigger print
-      const triggerPrint = () => {
-        try {
-          printWindow.focus();
-          printWindow.print();
-        } catch {
-          // Fallback: just let the user manually Ctrl+P
-        }
-      };
+      await html2pdf()
+        .set({
+          margin:       [6, 6, 6, 6],
+          filename:     `${safeName || "enhanced"}-resume.pdf`,
+          image:        { type: "jpeg", quality: 0.98 },
+          html2canvas:  { scale: 2, useCORS: true, letterRendering: true, scrollY: 0 },
+          jsPDF:        { unit: "mm", format: "a4", orientation: "portrait" },
+          pagebreak:    { mode: ["avoid-all", "css", "legacy"] }
+        })
+        .from(container)
+        .save();
 
-      // Use onload for reliable timing
-      if (printWindow.document.readyState === "complete") {
-        setTimeout(triggerPrint, 300);
-      } else {
-        printWindow.onload = () => setTimeout(triggerPrint, 300);
-      }
+      // Clean up off-screen container
+      document.body.removeChild(container);
 
-      dispatch(addToast({ type: "success", message: "Print dialog opened — select \"Save as PDF\" to download your resume." }));
+      dispatch(addToast({ type: "success", message: "PDF downloaded successfully!" }));
     } catch (error) {
-      dispatch(addToast({ type: "error", message: "Failed to generate PDF." }));
+      console.error("PDF export error:", error);
+      dispatch(addToast({ type: "error", message: "Failed to generate PDF. Please try again." }));
     } finally {
       setIsExporting(false);
     }
   };
+
 
   // Handle Edit in Builder
   const handleEditInBuilder = () => {
