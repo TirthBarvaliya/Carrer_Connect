@@ -556,8 +556,9 @@ const ResumeBuilderPanel = ({ profile, onProfileUpdated, variant = "embedded" })
           a.download = `${baseName}.pdf`;
           a.click();
           URL.revokeObjectURL(url);
-        } catch {
+        } catch (serverErr) {
           // Fallback: generate PDF client-side with jsPDF
+          console.info("Server PDF export unavailable, using client-side jsPDF fallback.", serverErr?.response?.data?.code || "");
           const doc = buildPdfDocument();
           doc.save(`${baseName}.pdf`);
         }
@@ -599,8 +600,9 @@ const ResumeBuilderPanel = ({ profile, onProfileUpdated, variant = "embedded" })
           }, { responseType: "blob" });
           dataUrl = await blobToDataUrl(resp.data);
           blobSize = resp.data.size;
-        } catch {
-          // Fallback: generate PDF client-side with jsPDF
+        } catch (serverErr) {
+          // Fallback: generate PDF client-side with jsPDF (server-side Puppeteer unavailable)
+          console.info("Server PDF export unavailable, using client-side jsPDF fallback.", serverErr?.response?.data?.code || "");
           const doc = buildPdfDocument();
           const blob = doc.output("blob");
           dataUrl = await blobToDataUrl(blob);

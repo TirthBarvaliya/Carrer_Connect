@@ -37,61 +37,15 @@ export const renderThemePreview = async (req, res) => {
 
 /**
  * POST /api/resume/export-pdf
- * Renders the resume as PDF using Puppeteer and returns the buffer.
+ * Server-side PDF export is disabled on Azure (no Chrome available).
+ * Returns 501 so the frontend falls back to client-side jsPDF generation.
+ *
  * Body: { resumeData, themeId, formatting }
  */
-export const exportPdf = async (req, res) => {
-  let browser;
-  try {
-    const { resumeData, themeId, formatting } = req.body;
-
-    if (!resumeData || !themeId) {
-      return res.status(400).json({ message: "resumeData and themeId are required." });
-    }
-
-    const html = await renderResume(resumeData, themeId, formatting || {});
-
-    // Dynamic import to avoid loading Puppeteer unless actually needed
-    const puppeteer = await import("puppeteer");
-    browser = await puppeteer.default.launch({
-      headless: true,
-      args: [
-        "--no-sandbox",
-        "--disable-setuid-sandbox",
-        "--disable-dev-shm-usage",
-        "--disable-gpu",
-        "--no-first-run",
-        "--no-zygote",
-        "--single-process"
-      ],
-      ignoreHTTPSErrors: true
-    });
-
-    const page = await browser.newPage();
-    await page.setContent(html, { waitUntil: "networkidle0", timeout: 30000 });
-    const pdfBuffer = await page.pdf({
-      format: "A4",
-      printBackground: true,
-      margin: { top: "10mm", bottom: "10mm", left: "10mm", right: "10mm" }
-    });
-
-    await browser.close();
-    browser = null;
-
-    res.set({
-      "Content-Type": "application/pdf",
-      "Content-Disposition": `attachment; filename="resume.pdf"`,
-      "Content-Length": pdfBuffer.length
-    });
-    res.end(pdfBuffer);
-  } catch (error) {
-    console.error("PDF export error:", error.message || error);
-    if (browser) {
-      try { await browser.close(); } catch {}
-    }
-    res.status(500).json({
-      message: "Failed to export PDF. Puppeteer may not be available on this system. Try using a built-in template."
-    });
-  }
+export const exportPdf = (req, res) => {
+  res.status(501).json({
+    code: "PUPPETEER_UNAVAILABLE",
+    message: "Server-side PDF export is not available. Please use client-side PDF generation."
+  });
 };
 
