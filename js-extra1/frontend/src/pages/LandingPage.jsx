@@ -24,6 +24,7 @@ import GradientButton from "../components/common/GradientButton";
 import RevolvingBorderButton from "../components/common/RevolvingBorderButton";
 import TypingHeadline from "../components/common/TypingHeadline";
 import RoadmapSnapshot3D from "../components/landing/RoadmapSnapshot3D";
+import HowItWorksTimeline from "../components/landing/HowItWorksTimeline";
 import { featuredCompanies, platformFeatures, testimonials, topCategories } from "../utils/mockData";
 import { ROUTES, USER_ROLES } from "../utils/constants";
 import usePageTitle from "../hooks/usePageTitle";
@@ -448,174 +449,62 @@ const LandingPage = () => {
         </div>
       </section>
 
-      <AnimatedSection className="py-16 sm:py-20">
-        <div className="container-4k">
-          <div className="mb-12 text-center">
-            <motion.span
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="mb-3 inline-flex items-center gap-2 rounded-full border border-brand-indigo/25 bg-brand-indigo/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-brand-indigo dark:border-brand-indigo/40 dark:bg-brand-indigo/20 dark:text-cyan-300"
-            >
-              <Route size={13} />
-              Your Journey
-            </motion.span>
-            <h2 className="section-title">How It Works</h2>
-            <p className="section-subtitle mx-auto mt-2 max-w-2xl">
-              From profile to placement — five powerful steps to accelerate your career with AI.
-            </p>
-          </div>
+      {/* ═══ HOW IT WORKS — Scroll-driven animated timeline ═══ */}
+      {(() => {
+        /* ---- timeline data (unchanged) ---- */
+        const STEPS = [
+          {
+            step: "01",
+            title: "Build Your Profile",
+            description: "Add your skills, write your bio, and let the platform understand your unique career goals and aspirations.",
+            icon: Sparkles,
+            highlight: "Skills · Bio · Career Goals",
+            gradient: "from-blue-500 to-brand-indigo"
+          },
+          {
+            step: "02",
+            title: "Explore AI-Powered Tools",
+            description: "Get daily Tech Pulse insights, chat with our AI career guide, and analyze your resume with ATS scoring.",
+            icon: Brain,
+            highlight: "Tech Pulse · AI Chatbot · ATS Checker",
+            gradient: "from-brand-indigo to-brand-cyan"
+          },
+          {
+            step: "03",
+            title: "Follow Your Roadmap",
+            description: "AI-generated career paths tailored to your skill level with real-time progress tracking and milestone celebrations.",
+            icon: Route,
+            highlight: "AI Roadmaps · Progress Tracking",
+            gradient: "from-brand-cyan to-emerald-500"
+          },
+          {
+            step: "04",
+            title: "Ace Your Interviews",
+            description: "Practice domain-specific interviews with our AI coach. Get instant feedback, scoring, and improvement tips.",
+            icon: Bot,
+            highlight: "AI Interview Prep · Instant Feedback",
+            gradient: "from-emerald-500 to-brand-purple"
+          },
+          {
+            step: "05",
+            title: "Land Your Dream Job",
+            description: "Smart job matching powered by your skills, 20+ professional resume templates, and seamless one-click applications.",
+            icon: BriefcaseBusiness,
+            highlight: "Smart Matching · 20+ Templates · One-Click Apply",
+            gradient: "from-brand-purple to-pink-500"
+          }
+        ];
 
-          <div className="relative mx-auto max-w-4xl">
-            {/* Vertical connecting timeline line — desktop only */}
-            <div className="pointer-events-none absolute left-6 top-0 hidden h-full w-px lg:left-1/2 lg:block">
-              <motion.div
-                className="h-full w-full bg-gradient-to-b from-brand-indigo via-brand-cyan to-brand-purple"
-                initial={{ scaleY: 0 }}
-                whileInView={{ scaleY: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 1.2, ease: "easeOut" }}
-                style={{ transformOrigin: "top" }}
-              />
-            </div>
+        return (
+          <HowItWorksTimeline
+            steps={STEPS}
+            joinTarget={joinTarget}
+            isAuthenticated={isAuthenticated}
+            navigate={navigate}
+          />
+        );
+      })()}
 
-            <div className="space-y-8 lg:space-y-12">
-              {[
-                {
-                  step: "01",
-                  title: "Build Your Profile",
-                  description: "Add your skills, write your bio, and let the platform understand your unique career goals and aspirations.",
-                  icon: Sparkles,
-                  highlight: "Skills · Bio · Career Goals",
-                  gradient: "from-blue-500 to-brand-indigo"
-                },
-                {
-                  step: "02",
-                  title: "Explore AI-Powered Tools",
-                  description: "Get daily Tech Pulse insights, chat with our AI career guide, and analyze your resume with ATS scoring.",
-                  icon: Brain,
-                  highlight: "Tech Pulse · AI Chatbot · ATS Checker",
-                  gradient: "from-brand-indigo to-brand-cyan"
-                },
-                {
-                  step: "03",
-                  title: "Follow Your Roadmap",
-                  description: "AI-generated career paths tailored to your skill level with real-time progress tracking and milestone celebrations.",
-                  icon: Route,
-                  highlight: "AI Roadmaps · Progress Tracking",
-                  gradient: "from-brand-cyan to-emerald-500"
-                },
-                {
-                  step: "04",
-                  title: "Ace Your Interviews",
-                  description: "Practice domain-specific interviews with our AI coach. Get instant feedback, scoring, and improvement tips.",
-                  icon: Bot,
-                  highlight: "AI Interview Prep · Instant Feedback",
-                  gradient: "from-emerald-500 to-brand-purple"
-                },
-                {
-                  step: "05",
-                  title: "Land Your Dream Job",
-                  description: "Smart job matching powered by your skills, 20+ professional resume templates, and seamless one-click applications.",
-                  icon: BriefcaseBusiness,
-                  highlight: "Smart Matching · 20+ Templates · One-Click Apply",
-                  gradient: "from-brand-purple to-pink-500"
-                }
-              ].map((item, index) => {
-                const Icon = item.icon;
-                const isEven = index % 2 === 0;
-
-                return (
-                  <motion.div
-                    key={item.step}
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-60px" }}
-                    transition={{ duration: 0.5, delay: index * 0.08 }}
-                    className={`relative flex flex-col items-start gap-5 lg:flex-row lg:items-center lg:gap-0 ${
-                      isEven ? "lg:flex-row" : "lg:flex-row-reverse"
-                    }`}
-                  >
-                    {/* Timeline dot — centered on timeline */}
-                    <div className="absolute left-6 top-0 z-10 hidden lg:left-1/2 lg:block lg:-translate-x-1/2">
-                      <motion.div
-                        className={`flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br ${item.gradient} shadow-lg`}
-                        whileHover={{ scale: 1.15 }}
-                        whileInView={{
-                          boxShadow: [
-                            "0 0 0px rgba(99,102,241,0)",
-                            "0 0 20px rgba(99,102,241,0.3)",
-                            "0 0 0px rgba(99,102,241,0)"
-                          ]
-                        }}
-                        viewport={{ once: true }}
-                        transition={{ boxShadow: { duration: 2, repeat: Infinity, ease: "easeInOut" }, scale: { duration: 0.2 } }}
-                      >
-                        <span className="text-sm font-bold text-white">{item.step}</span>
-                      </motion.div>
-                    </div>
-
-                    {/* Content card */}
-                    <div className={`w-full lg:w-[calc(50%-2rem)] ${isEven ? "lg:pr-4" : "lg:pl-4"}`}>
-                      <motion.div
-                        whileHover={{ y: -3, transition: { duration: 0.25 } }}
-                        className="group relative overflow-hidden rounded-2xl border border-white/20 bg-white/[0.06] p-5 backdrop-blur-xl transition-all duration-300 hover:border-brand-indigo/30 hover:shadow-[0_8px_32px_rgba(99,102,241,0.12)] dark:border-white/10 dark:bg-slate-900/30 dark:hover:border-cyan-500/25 dark:hover:shadow-[0_8px_32px_rgba(34,211,238,0.08)]"
-                      >
-                        {/* Subtle gradient background on hover */}
-                        <span className={`pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br ${item.gradient} opacity-0 transition-opacity duration-500 group-hover:opacity-[0.04]`} />
-
-                        <div className="relative z-10">
-                          <div className="mb-3 flex items-center gap-3">
-                            {/* Mobile step number */}
-                            <div className={`flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br ${item.gradient} text-xs font-bold text-white shadow-md lg:hidden`}>
-                              {item.step}
-                            </div>
-                            <div className={`flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br ${item.gradient} bg-opacity-10`}>
-                              <Icon size={17} className="text-brand-indigo dark:text-cyan-300" />
-                            </div>
-                            <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
-                              {item.title}
-                            </h3>
-                          </div>
-                          <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-300">
-                            {item.description}
-                          </p>
-                          <div className="mt-3 flex flex-wrap gap-1.5">
-                            {item.highlight.split(" · ").map((tag) => (
-                              <span
-                                key={tag}
-                                className="rounded-full border border-brand-indigo/15 bg-brand-indigo/[0.06] px-2.5 py-0.5 text-[10px] font-semibold text-brand-indigo dark:border-cyan-500/20 dark:bg-cyan-500/[0.08] dark:text-cyan-300"
-                              >
-                                {tag}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      </motion.div>
-                    </div>
-
-                    {/* Spacer for the other side */}
-                    <div className="hidden w-[calc(50%-2rem)] lg:block" />
-                  </motion.div>
-                );
-              })}
-            </div>
-
-            {/* Bottom CTA */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="mt-12 text-center"
-            >
-              <GradientButton onClick={() => navigate(joinTarget)} className="px-6 py-3">
-                {isAuthenticated ? "Go to Dashboard" : "Start Your Journey"}
-                <ArrowRight size={15} className="ml-2" />
-              </GradientButton>
-            </motion.div>
-          </div>
-        </div>
-      </AnimatedSection>
 
       <AnimatedSection id="ai-job-prep" className="py-16">
         <div className="container-4k">
