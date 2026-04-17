@@ -37,6 +37,7 @@ const CreditPurchaseModal = ({ isOpen, onClose, onPurchaseComplete }) => {
   const [cardExpiry, setCardExpiry] = useState("");
   const [cardCvv, setCardCvv] = useState("");
   const [bankCode, setBankCode] = useState("");
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const resetState = () => {
     setStep("plans");
@@ -49,6 +50,7 @@ const CreditPurchaseModal = ({ isOpen, onClose, onPurchaseComplete }) => {
     setCardExpiry("");
     setCardCvv("");
     setBankCode("");
+    setShowConfirm(false);
   };
 
   const handleClose = () => {
@@ -117,9 +119,15 @@ const CreditPurchaseModal = ({ isOpen, onClose, onPurchaseComplete }) => {
     return true;
   };
 
-  const handlePay = async () => {
+  // Show confirmation dialog first
+  const handlePay = () => {
     if (!validatePayment()) return;
+    setShowConfirm(true);
+  };
 
+  // Actually execute the payment after user confirms
+  const executePayment = async () => {
+    setShowConfirm(false);
     setStep("processing");
     setError("");
 
@@ -152,6 +160,7 @@ const CreditPurchaseModal = ({ isOpen, onClose, onPurchaseComplete }) => {
   if (!isOpen) return null;
 
   return (
+    <>
     <AnimatePresence>
       {isOpen && (
         <motion.div
@@ -572,6 +581,97 @@ const CreditPurchaseModal = ({ isOpen, onClose, onPurchaseComplete }) => {
         </motion.div>
       )}
     </AnimatePresence>
+
+      {/* ═══════ Payment Confirmation Mini-Modal ═══════ */}
+      <AnimatePresence>
+        {showConfirm && selectedPlan && (() => {
+          const accent = planAccentColors[selectedPlan?.id] || planAccentColors.basic;
+          const Icon = PLAN_ICONS[selectedPlan?.id] || Zap;
+          const methodLabel = paymentMethod === "upi" ? "UPI" : paymentMethod === "card" ? "Card" : "Net Banking";
+          return (
+            <motion.div
+              className="fixed inset-0 z-[80] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowConfirm(false)}
+            >
+              <motion.div
+                initial={{ scale: 0.85, opacity: 0, y: 20 }}
+                animate={{ scale: 1, opacity: 1, y: 0 }}
+                exit={{ scale: 0.9, opacity: 0, y: 10 }}
+                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                className="relative w-full max-w-sm overflow-hidden rounded-2xl border border-slate-200/60 bg-white shadow-2xl dark:border-slate-700/50 dark:bg-[#0d0d1a]"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {/* Accent top bar */}
+                <div className="h-1" style={{ background: `linear-gradient(90deg, ${accent.text}, #8b5cf6, ${accent.text})` }} />
+
+                <div className="p-6">
+                  {/* Icon + Title */}
+                  <div className="mb-4 flex flex-col items-center text-center">
+                    <div
+                      className="mb-3 flex h-12 w-12 items-center justify-center rounded-full"
+                      style={{ backgroundColor: `${accent.text}15` }}
+                    >
+                      <AlertCircle size={24} style={{ color: accent.text }} />
+                    </div>
+                    <h4 className="text-lg font-bold text-slate-900 dark:text-white">Confirm Payment</h4>
+                    <p className="mt-1 text-sm text-slate-500 dark:text-white/40">
+                      Please review your order before proceeding
+                    </p>
+                  </div>
+
+                  {/* Order details */}
+                  <div
+                    className="mb-5 rounded-xl border p-3.5"
+                    style={{ borderColor: accent.border, backgroundColor: `${accent.text}06` }}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2.5">
+                        <div
+                          className="flex h-8 w-8 items-center justify-center rounded-lg"
+                          style={{ backgroundColor: `${accent.text}18` }}
+                        >
+                          <Icon size={16} style={{ color: accent.text }} />
+                        </div>
+                        <div>
+                          <p className="text-sm font-semibold text-slate-800 dark:text-white">{selectedPlan.label}</p>
+                          <p className="text-[11px] text-slate-400 dark:text-white/30">{selectedPlan.credits} credits • {methodLabel}</p>
+                        </div>
+                      </div>
+                      <p className="text-lg font-bold text-slate-900 dark:text-white">₹{selectedPlan.price}</p>
+                    </div>
+                  </div>
+
+                  {/* Buttons */}
+                  <div className="flex gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setShowConfirm(false)}
+                      className="flex-1 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-50 dark:border-white/10 dark:bg-white/5 dark:text-white/60 dark:hover:bg-white/10"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="button"
+                      onClick={executePayment}
+                      className="flex-1 overflow-hidden rounded-xl py-2.5 text-sm font-bold text-white transition-all duration-300 hover:brightness-110"
+                      style={{
+                        background: `linear-gradient(135deg, ${accent.text}, #8b5cf6)`,
+                        boxShadow: `0 4px 16px ${accent.glow}`
+                      }}
+                    >
+                      Confirm Payment
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            </motion.div>
+          );
+        })()}
+      </AnimatePresence>
+    </>
   );
 };
 
