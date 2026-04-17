@@ -508,9 +508,6 @@ const CreditPurchaseModal = ({ isOpen, onClose, onPurchaseComplete }) => {
                       >
                         Pay ₹{selectedPlan.price}
                       </button>
-                      <p className="mt-2.5 text-center text-[10px] font-light tracking-wider text-slate-400 dark:text-white/25">
-                        This is a simulated payment for demo purposes
-                      </p>
                     </div>
                   </div>
                 )}
