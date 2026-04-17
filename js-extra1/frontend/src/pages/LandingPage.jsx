@@ -506,22 +506,22 @@ const LandingPage = () => {
       })()}
 
 
-      <AnimatedSection id="ai-job-prep" className="py-16">
+      <AnimatedSection id="ai-job-prep" className="py-12 sm:py-16">
         <div className="container-4k">
-          <div className="grid items-center gap-12 lg:grid-cols-2">
+          <div className="grid items-center gap-8 sm:gap-10 lg:grid-cols-2 lg:gap-12">
 
             {/* LEFT SIDE: Text & CTA */}
             <div className="max-w-xl">
               <div className="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-indigo to-brand-cyan text-white shadow-glow">
                 <Bot size={24} />
               </div>
-              <h2 className="font-poppins text-3xl font-bold leading-tight text-slate-900 sm:text-4xl dark:text-white">
+              <h2 className="font-poppins text-2xl font-bold leading-tight text-slate-900 sm:text-3xl lg:text-4xl dark:text-white">
                 Job Prep
               </h2>
-              <p className="mt-4 text-lg text-slate-600 dark:text-slate-300">
+              <p className="mt-3 text-base text-slate-600 sm:mt-4 sm:text-lg dark:text-slate-300">
                 Practice interviews with our Free AI Interview Coach. Select your domain, face technical questions, and get instant feedback to sharpen your skills.
               </p>
-              <div className="mt-8">
+              <div className="mt-6 sm:mt-8">
                 <GradientButton onClick={() => startInterview(PREP_DOMAINS[prepIndex].id)}>
                   Practice Now
                 </GradientButton>
@@ -531,25 +531,24 @@ const LandingPage = () => {
             {/* RIGHT SIDE: Stacked Card Deck Carousel */}
             <div className="relative flex w-full flex-col items-center">
 
-              {/* Navigation Arrows — ABOVE the deck on mobile, top-right on sm+ */}
-              <div className="relative z-30 mb-3 flex w-full items-center justify-center gap-3 sm:absolute sm:right-2 sm:top-0 sm:mb-0 sm:w-auto sm:justify-end">
+              {/* Navigation Arrows — right-aligned on all views, absolute top-right on lg */}
+              <div className="relative z-30 mb-4 flex w-full items-center justify-end gap-3 lg:absolute lg:right-2 lg:top-0 lg:mb-0 lg:w-auto">
                 <button
                   onClick={() => handlePrepNavigation("prev")}
-                  className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-300/40 bg-white/80 text-slate-600 shadow-md backdrop-blur-xl transition-all hover:scale-110 hover:border-brand-cyan/40 hover:text-brand-indigo dark:border-white/15 dark:bg-slate-800/70 dark:text-white/70 dark:hover:bg-slate-700 dark:hover:text-white sm:h-11 sm:w-11"
-                  aria-label="Previous domain"
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-300/40 bg-white/80 text-slate-600 shadow-md backdrop-blur-xl transition-all active:scale-95 active:bg-brand-indigo/20 hover:scale-110 hover:border-brand-cyan/40 hover:text-brand-indigo dark:border-white/15 dark:bg-slate-800/70 dark:text-white/70 dark:hover:bg-slate-700 dark:hover:text-white dark:active:bg-brand-cyan/20 sm:h-11 sm:w-11"
                 >
                   <ChevronLeft size={20} />
                 </button>
                 <button
                   onClick={() => handlePrepNavigation("next")}
-                  className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-300/40 bg-white/80 text-slate-600 shadow-md backdrop-blur-xl transition-all hover:scale-110 hover:border-brand-cyan/40 hover:text-brand-indigo dark:border-white/15 dark:bg-slate-800/70 dark:text-white/70 dark:hover:bg-slate-700 dark:hover:text-white sm:h-11 sm:w-11"
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-300/40 bg-white/80 text-slate-600 shadow-md backdrop-blur-xl transition-all active:scale-95 active:bg-brand-indigo/20 hover:scale-110 hover:border-brand-cyan/40 hover:text-brand-indigo dark:border-white/15 dark:bg-slate-800/70 dark:text-white/70 dark:hover:bg-slate-700 dark:hover:text-white dark:active:bg-brand-cyan/20 sm:h-11 sm:w-11"
                   aria-label="Next domain"
                 >
                   <ChevronRight size={20} />
                 </button>
               </div>
 
-              <div className="relative flex h-[340px] w-[min(100%,320px)] items-center justify-center sm:h-[400px] sm:mt-6">
+              <div className="relative flex h-[320px] w-[min(100%,300px)] items-center justify-center sm:h-[360px] sm:w-[min(100%,340px)] md:h-[400px] md:w-[min(100%,360px)] lg:mt-8 lg:h-[400px] lg:w-[min(100%,340px)]">
                 {PREP_DOMAINS.map((domain, i) => {
                   let stackPos = i - prepIndex;
                   if (stackPos > Math.floor(PREP_DOMAINS.length / 2)) stackPos -= PREP_DOMAINS.length;
@@ -613,15 +612,15 @@ const LandingPage = () => {
                       )}
 
                       {/* Bottom overlay with title + button */}
-                      <div className="relative z-10 mt-auto flex flex-col items-center gap-3 sm:gap-4 text-center">
+                      <div className="relative z-10 mt-auto flex flex-col items-center gap-3 text-center sm:gap-4">
                         <div>
                           <h3
-                            className={`font-poppins text-lg sm:text-xl font-bold drop-shadow-lg transition-colors duration-300 ${isActive ? "text-white" : "text-white/70"
+                            className={`font-poppins text-lg font-bold drop-shadow-lg transition-colors duration-300 sm:text-xl ${isActive ? "text-white" : "text-white/70"
                               }`}
                           >
                             {domain.title}
                           </h3>
-                          <p className="mt-1 text-[10px] sm:text-xs font-medium uppercase tracking-wide text-brand-cyan drop-shadow-md">
+                          <p className="mt-1 text-[10px] font-medium uppercase tracking-wide text-brand-cyan drop-shadow-md sm:text-xs">
                             5 Min AI Interview
                           </p>
                         </div>
@@ -632,7 +631,7 @@ const LandingPage = () => {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.15, duration: 0.3 }}
                             onClick={() => startInterview(domain.id)}
-                            className="relative inline-flex w-full items-center justify-center overflow-hidden rounded-xl bg-gradient-to-r from-brand-indigo via-brand-cyan to-brand-purple px-4 py-2.5 sm:px-5 sm:py-3 text-sm sm:text-base font-semibold text-white shadow-glow transition duration-300 hover:scale-[1.03] hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-indigo"
+                            className="relative inline-flex w-full items-center justify-center overflow-hidden rounded-xl bg-gradient-to-r from-brand-indigo via-brand-cyan to-brand-purple px-4 py-2.5 text-sm font-semibold text-white shadow-glow transition duration-300 hover:scale-[1.03] hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-indigo sm:px-5 sm:py-3 sm:text-base"
                           >
                             Practice Interview
                           </motion.button>
